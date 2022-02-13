@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText txtnum1, txtnum2;
@@ -28,6 +31,14 @@ public class MainActivity extends AppCompatActivity {
 
     //Metodo que se ejecuta declarado en el xml
     public void operacion(View view) {
+
+        if(isTextEmpty(txtnum1.getText().toString()) || isTextEmpty(txtnum2.getText().toString())){
+
+            Toast.makeText(this, "Error al leer los numeros: Por favor llene los campos", Toast.LENGTH_LONG).show();
+
+            return;
+        }
+
         try {
             num1 = Double.parseDouble(txtnum1.getText().toString());
             num2 = Double.parseDouble(txtnum2.getText().toString());
@@ -95,4 +106,32 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("resultado", String.format("%.2f", resultado));
         startActivity(intent);
     }
+
+    /******************************************************************/
+    private static boolean isNumeric(String cadena){
+        try {
+            Double.parseDouble(cadena);
+            return true;
+        } catch (NumberFormatException nfe){
+            return false;
+        }
+    }
+
+    private static boolean isText(String text){
+
+        // Validando un texto que solo acepte letras sin importar tamaño
+        Pattern pat = Pattern.compile("[a-zA-Z ]");
+        Matcher mat = pat.matcher(text);
+
+        return (mat.matches())?true:false;
+
+    }
+
+
+    //Si el texto esta vacio
+    private static boolean isTextEmpty(String text){
+
+        return (text.length()==0)?true:false;
+    }
+
 }
